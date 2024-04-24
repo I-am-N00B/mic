@@ -47,18 +47,21 @@ async def service_alive(token: str = Header()):
         return "Wrong JWT Token"
 
 @app.get("/search_art")
-async def search_art(query: str):
-    url = f"https://api.harvardartmuseums.org/object"
-    params = {
-        "apikey": API_KEY,
-        "title": query,
-        "size": 10
-    }
-    response = requests.get(url, params=params)
-    if response.status_code == 200:
-        return response.json()
+async def search_art(query: str, token: str = Header()):
+    if (chech_for_role_test(token)):
+        url = f"https://api.harvardartmuseums.org/object"
+        params = {
+            "apikey": API_KEY,
+            "title": query,
+            "size": 10
+        }
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise HTTPException(status_code=400, detail="Error retrieving data from Harvard Art Museums API")
     else:
-        raise HTTPException(status_code=400, detail="Error retrieving data from Harvard Art Museums API")
+        return "Wrong JWT Token"
 
 
 @app.get("/get_art_by_id")
