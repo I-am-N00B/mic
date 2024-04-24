@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+
+  paintings_service:
+    restart: on-failure
+    container_name: paintings_service
+    build: paintings_service/
+    ports:
+      - "8000:80"
+
+  museum_service:
+    restart: on-failure
+    container_name: museum_service
+    build: museum_service/
+    ports:
+      - "8001:80"
